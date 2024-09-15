@@ -1,8 +1,10 @@
 const express = require('express');
 const app = express();
 const port = 3000;
+const cors = require('cors');
 const { Project, Technology, Category, ProjectImage } = require('./models');
 
+app.use(cors());
 // Middleware para manejar JSON
 app.use(express.json());
 
