@@ -1,13 +1,8 @@
-'use strict';
+/*'use strict';
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Project extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       // define association here
     }
@@ -42,4 +37,45 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   return Project;
-};
+};*/
+
+'use strict';
+const mongoose = require('mongoose');
+
+const Technology = new mongoose.Schema({ 
+  name: String, 
+  description: String, 
+  logo_url: String 
+});
+
+const Category = new mongoose.Schema({
+  name: String,
+  description: String
+});
+
+const ProjectImage = new mongoose.Schema({ 
+  image_url: String, 
+  alt_text: String, 
+  order: Number 
+});
+
+const Project = new mongoose.Schema({
+  title: String,
+  description: String,
+  short_description: String,
+  start_date: Date,
+  end_date: Date,
+  client: String,
+  role: String,
+  responsibilities: String,
+  project_url: String,
+  repository_url: String,
+  status: String,
+  technologies: [Technology],
+  categories: [Category],
+  images: [ProjectImage]
+});
+
+const ProjectModel = mongoose.model('Projects', Project);
+
+module.exports = ProjectModel;
