@@ -4,9 +4,6 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const ProjectModel = require('./models/project');
-const TechnologyModel = require('./models/technology');
-const Category = require('./models/category');
-const ProjectImage = require('./models/projectimage');
 
 dotenv.config();
 
