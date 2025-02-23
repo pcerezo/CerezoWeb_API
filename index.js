@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const ProjectModel = require('./models/project');
+const nodemailer = require('nodemailer');
 
 dotenv.config();
 
@@ -24,9 +25,18 @@ mongoose.connect(`mongodb://127.0.0.1:${port}/portfolioBD`, { useNewUrlParser: t
   mongoose.connection.on('connected', () => console.log('Conectado a MongoDB'));
   mongoose.connection.on('error', (err) => console.error('Error al conectar a MongoDB:', err));
 
+const transporter = nodemailer.createTransport({
+  service: 'gmail', // o cualquier otro servicio
+  auth: {
+    user: process.env.EMAIL_USER, // tu correo
+    pass: process.env.EMAIL_CODE // tu contraseña
+  }
+});
+
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
+
 
 // Ruta para obtener la lista de proyectos con información resumida
 app.get('/api/projects', async (req, res) => {
@@ -54,6 +64,32 @@ app.get('/api/projects/:id', async (req, res) => {
     console.error('Error al obtener el proyecto:', error);
     res.status(500).json({ error: 'Error al obtener el proyecto' });
   }
+});
+
+
+// Enviar correo de solicitud de producción musical
+app.post('/api/enviarCorreo', async(req, res) => {
+  const { nombre, email, mensaje } = req.body;
+
+  // Detalles del correo
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: process.env.EMAIL_DESTINO,
+    subject: "Mensaje enviado desde el portafolio por " + nombre,
+    text: "Tienes un mensaje enviado desde el portafolio de parte de " + nombre + " cuyo correo es " + email + ". \n\n" 
+      + "\"" + mensaje + "\""
+  };
+
+  // Envío del correo
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error al enviar el correo: ' + error);
+      res.status(500).json({status: 500, message: 'Error al enviar el correo: ' + error});
+    } else {
+      console.log('Correo enviado: ' + info.response);
+      res.status(200).json({status: 200, message: 'Correo enviado'});
+    }
+  });
 });
 
 /*

@@ -16,6 +16,7 @@
     "mongoose": "^8.9.5",
     "mysql2": "^3.11.0",
     "sequelize": "^6.37.3",
-    "sequelize-cli": "^6.6.2"
+    "sequelize-cli": "^6.6.2",
+    "nodemailer": "^6.9.15"
   }
 }
